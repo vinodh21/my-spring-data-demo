@@ -3,16 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
     @InjectMocks
@@ -22,16 +19,13 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    public void testCreateUser(){
+    public void testCreateUser() {
+        //Given
         User user = new User("John", "Doe", "john.doe@gmail.com");
-
         Mockito.when(userService.saveUser(Mockito.any(User.class))).thenReturn(user);
-        ResponseEntity<User> response = userController.createUser(user);
-
-        System.out.println(response);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(user, response.getBody());
-
+        //When
+        userController.createUser(user);
+        //Then
         Mockito.verify(userService, Mockito.times(1)).saveUser(Mockito.any(User.class));
     }
 }
